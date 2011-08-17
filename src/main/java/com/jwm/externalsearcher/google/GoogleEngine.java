@@ -46,12 +46,19 @@ public class GoogleEngine{
         "Opera/9.80 (Windows NT 6.1 x64; U; en) Presto/2.7.62 Version/11.00"
     };
 
+    private static String urls [] = new String[]{
+        "http://www.google.com/search?q=site:jwmsolutions.com&hl=en&biw=1600&bih=607&prmd=ivns&ei=omVHTr-8OcyisQLlwYCSCA&start={0}&sa=N",
+        "http://www.google.com/search?q=site:jwmsolutions.com&hl=en&biw=1440&bih=812&prmd=ivns&ei=TVFJTp_kI4qIsAKhlKCSCA&start={0}&sa=N",
+        "http://www.google.com/search?q=site:jwmsolutions.com&hl=en&biw=1440&bih=751&prmd=ivns&ei=nVNJTpCCOYTKsQKX44ySCA&start={0}&sa=N"
+    };
+
+
 
     public static void
         main(String []args) throws IOException{
             //search(googleURL, 0);
             System.out.println("#############");
-            search("http://www.google.com/search?q=site:unam.mx&hl=en&biw=1600&bih=607&prmd=ivns&ei=omVHTr-8OcyisQLlwYCSCA&start={0}&sa=N",0);
+            search(0);
             //System.out.println("URL>"+googleURL);
             //System.out.println(doc.select("td.cur").text());
             //System.out.println(doc.select("table#nav").select("a.fl"));
@@ -59,8 +66,8 @@ public class GoogleEngine{
         }
 
     public static void
-        search(String url, int seq) throws IOException{
-            String innerurl = url.replace("{0}", ""+(seq * 10));
+        search(int seq) throws IOException{
+            String innerurl = urls[new Random().nextInt(urls.length)].replace("{0}", ""+(seq * 10));
             System.out.println("Using url>"+innerurl);
             String agent = agents[new Random().nextInt(agents.length)];
             System.out.println("agent>"+agent);
@@ -88,7 +95,7 @@ public class GoogleEngine{
                 }catch(Exception e){
                     e.printStackTrace();
                 }
-                search(url, curr);
+                search(curr);
             }
         }
 }
