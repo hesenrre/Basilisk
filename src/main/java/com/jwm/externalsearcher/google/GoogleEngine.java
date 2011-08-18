@@ -8,6 +8,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.apache.commons.lang.StringUtils;
 
 
 
@@ -52,6 +53,11 @@ public class GoogleEngine{
         "http://www.google.com/search?q=site:jwmsolutions.com&hl=en&biw=1440&bih=751&prmd=ivns&ei=nVNJTpCCOYTKsQKX44ySCA&start={0}&sa=N"
     };
 
+    private static String urltemplates [] = new String[]{
+        "http://www.google.com/search?q=site:{0}&hl=en&biw=1600&bih=607&prmd=ivns&ei=omVHTr-8OcyisQLlwYCSCA&sa=N",
+        "http://www.google.com/search?q=site:{0}&hl=en&biw=1440&bih=812&prmd=ivns&ei=TVFJTp_kI4qIsAKhlKCSCA&sa=N",
+        "http://www.google.com/search?q=site:{0}&hl=en&biw=1440&bih=751&prmd=ivns&ei=nVNJTpCCOYTKsQKX44ySCA&sa=N"
+    };
 
 
     public static void
@@ -63,6 +69,26 @@ public class GoogleEngine{
             //System.out.println(doc.select("td.cur").text());
             //System.out.println(doc.select("table#nav").select("a.fl"));
             //System.out.println("#################################################");
+        }
+
+    public static long
+        getTotalsFor(String site){
+            return new Long(StringUtils.defaultIfEmpty(getDocument(site).select("#resultStats").text(),"0").replaceAll("[^0-9]",""));
+        }
+
+    public static Document
+        getDocument(String site){
+            try{
+                String url = urltemplates[new Random().nextInt(urltemplates.length)].replaceAll("\\{0\\}", site);
+                //System.out.println("url>"+url);
+                String agent = agents[new Random().nextInt(agents.length)];
+                return Jsoup.connect(url)
+                        .userAgent(agent).get();
+
+            }catch(Exception e){
+                e.printStackTrace();
+                return getDocument(site);
+            }
         }
 
     public static void
